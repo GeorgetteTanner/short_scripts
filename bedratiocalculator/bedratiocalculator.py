@@ -11,15 +11,17 @@ parser.add_argument('output', help='Output BED file.')
 args = parser.parse_args()
 
 regions={}
-with open(args.bed2,'r') as file: 
-    heading=file.readline()
+with open(args.bed2,'r') as file:
     for line in file:
-        l=line.strip().split('\t')
-        if l[0] not in regions: regions[l[0]]=[]
-        regions[l[0]].append(l[0:])
+        if line.startswith('Chromosome'):
+            pass
+        else:
+            l=line.strip().split('\t')
+            if l[0] not in regions: regions[l[0]]=[]
+            regions[l[0]].append(l[0:])
 
-   
-with open(args.output,'w+') as file2: 
+
+with open(args.output,'w+') as file2:
     with open(args.bed1,'r') as file:
         heading=file.readline()
         file2.write(heading)
@@ -45,6 +47,5 @@ with open(args.output,'w+') as file2:
                 b_allele=1
             else:
                 b_allele=round(float(l[5])/float(info[5]),5)
-            total=a_allele+b_allele     
+            total=a_allele+b_allele
             file2.write(l[0]+'\t'+l[1]+'\t'+l[2]+'\t'+str(total)+'\t'+str(a_allele)+'\t'+str(b_allele)+'\n')
-            
